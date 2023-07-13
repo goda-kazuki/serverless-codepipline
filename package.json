@@ -1,0 +1,22 @@
+{
+  "name": "serverless-codepipline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goda-kazuki/serverless-codepipline.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/goda-kazuki/serverless-codepipline/issues"
+  },
+  "homepage": "https://github.com/goda-kazuki/serverless-codepipline#readme",
+  "dependencies": {
+    "serverless": "^3.33.0"
+  }
+}
