@@ -1,0 +1,42 @@
+# https://dev.classmethod.jp/articles/created-codepipeline-with-cloudformation/#toc-4
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: CodeCommit Stack
+
+Parameters:
+# ------------------------------------------------------------#
+# Parameters
+# ------------------------------------------------------------# 
+  RepositoryDescription:
+    MaxLength: 4000
+    Type: String
+    Default: CodeCommit Repository
+
+  RepositoryName:
+    MaxLength: 100
+    Type: String
+    Default: serverless-codepipeline
+
+Resources:
+# ------------------------------------------------------------#
+# CodeCommit
+# ------------------------------------------------------------# 
+  CodeCommit:
+    Type: AWS::CodeCommit::Repository
+    Properties: 
+      RepositoryDescription: !Ref RepositoryDescription
+      RepositoryName: !Ref RepositoryName
+
+Outputs:
+# ------------------------------------------------------------#
+# Outputs
+# ------------------------------------------------------------# 
+  CodeCommitRepositoryName:
+    Value: !GetAtt CodeCommit.Name
+    Export: 
+      Name: codecommit-repository-name
+
+  CodeCommitRepositoryARN:
+    Value: !GetAtt CodeCommit.Arn
+    Export: 
+      Name: codecommit-repository-arn
