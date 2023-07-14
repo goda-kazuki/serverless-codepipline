@@ -77,25 +77,6 @@ Resources:
         - Key: Name
           Value: iam-role-codebuild
 
-  CodeDeployIAMRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
-        Statement: 
-          - Effect: Allow
-            Principal: 
-              Service: 
-                - codedeploy.amazonaws.com
-            Action: 
-              - 'sts:AssumeRole'
-      ManagedPolicyArns: 
-        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
-      RoleName: iam-role-codedeploy
-      Tags:
-        - Key: Name
-          Value: iam-role-codedeploy
-
   CodePipelineIAMPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties: 
@@ -116,16 +97,6 @@ Resources:
             Action:
               - "codebuild:BatchGetBuilds"
               - "codebuild:StartBuild"
-            Resource: 
-              - "*"
-          - Effect: Allow
-            Action:
-              - "codedeploy:CreateDeployment"
-              - "codedeploy:GetApplication"
-              - "codedeploy:GetApplicationRevision"
-              - "codedeploy:GetDeployment"
-              - "codedeploy:GetDeploymentConfig"
-              - "codedeploy:RegisterApplicationRevision"
             Resource: 
               - "*"
           - Effect: Allow
@@ -168,11 +139,6 @@ Outputs:
     Value: !GetAtt CodeBuildIAMRole.Arn
     Export: 
       Name: iam-role-codebuild-arn
-
-  CodeDeployIAMRoleARN:
-    Value: !GetAtt CodeDeployIAMRole.Arn
-    Export: 
-      Name: iam-role-codedeploy-arn
 
   CodePipelineIAMRoleARN:
     Value: !GetAtt CodePipelineIAMRole.Arn
