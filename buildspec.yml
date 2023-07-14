@@ -2,25 +2,10 @@ version: 0.2
 
 phases:
   install:
-    on-failure: ABORT
+    runtime-versions:
+      nodejs: 12
     commands:
-      - echo "install phases"
-      - echo "yum install などでビルドに使うパッケージをインストールするのに使用"
-  pre_build:
-    on-failure: ABORT
-    commands:
-      - echo "pre_build phases"
-      - echo "Amazon ECR にサインインしたりするのに使用"
+      - npm install
   build:
-    on-failure: ABORT
     commands:
-      - echo "build phases"
-      - echo "ビルド、テストなどを実行するのに使用"
-  post_build:
-    on-failure: ABORT
-    commands:
-      - echo "post_build phases"
-      - echo "Docker イメージをAmazon ECR にプッシュしたりZIPとかにアーカイブするのに使用"
-artifacts:
-  files:
-    - "**/*"
+      - npm run deploy
