@@ -8,6 +8,4 @@ phases:
       - npm install
   build:
     commands:
-      - ls -al
-      - sls deploy
       - npx sls deploy
