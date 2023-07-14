@@ -17,3 +17,7 @@
         remote = origin
         merge = refs/heads/main
 ```
+
+Githubを基本とし、GitHubActionsなどでSyncする方が都合が良いと思われるため、
+以下を参考に今後対応したい。
+https://github.com/aws-actions/configure-aws-credentials

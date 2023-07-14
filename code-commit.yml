@@ -40,9 +40,3 @@ Outputs:
     Value: !GetAtt CodeCommit.Arn
     Export: 
       Name: codecommit-repository-arn
-
-
-
-git config --global credential.helper '!aws codecommit credential-helper $@'
-git config --global credential.UseHttpPath true
-aaaaaaaaaaaああBB
