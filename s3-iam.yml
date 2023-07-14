@@ -144,3 +144,8 @@ Outputs:
     Value: !GetAtt CodePipelineIAMRole.Arn
     Export: 
       Name: iam-role-codepipeline-arn
+
+  S3BucketName:
+    Value: !Ref S3
+    Export: 
+      Name: S3BucketName
