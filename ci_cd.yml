@@ -1,0 +1,180 @@
+# CloudFormationでCodePipelineを作成するためのテンプレートファイル
+
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: CI/CD test Stack
+
+Resources:
+# ------------------------------------------------------------#
+# S3
+# ------------------------------------------------------------# 
+  S3:
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      BucketName: !Sub ${AWS::StackName}-${AWS::AccountId}-artifact
+      OwnershipControls:
+        Rules: 
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-${AWS::AccountId}-artifact
+
+# ------------------------------------------------------------#
+# IAM
+# ------------------------------------------------------------# 
+  CodeBuildIAMPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties: 
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: Allow
+            Action:
+              - 's3:PutObject'
+              - 's3:GetObject'
+            Resource: 
+              - !Join 
+                - ''
+                - - !GetAtt S3.Arn
+                  - '/*'
+          - Effect: Allow
+            Action: 
+              - 'codecommit:GitPull'
+            Resource: "*"
+          - Effect: Allow
+            Action: 
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+            Resource: "*"
+      ManagedPolicyName: iam-policy-codebuild
+
+  CodeBuildIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - codebuild.amazonaws.com
+            Action: 
+              - 'sts:AssumeRole'
+      ManagedPolicyArns: 
+        - !Ref CodeBuildIAMPolicy
+      RoleName: iam-role-codebuild
+      Tags:
+        - Key: Name
+          Value: iam-role-codebuild
+
+  CodeDeployIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - codedeploy.amazonaws.com
+            Action: 
+              - 'sts:AssumeRole'
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+      RoleName: iam-role-codedeploy
+      Tags:
+        - Key: Name
+          Value: iam-role-codedeploy
+
+  CodePipelineIAMPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties: 
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: Allow
+            Action:
+              - "codecommit:CancelUploadArchive"
+              - "codecommit:GetBranch"
+              - "codecommit:GetCommit"
+              - "codecommit:GetRepository"
+              - "codecommit:GetUploadArchiveStatus"
+              - "codecommit:UploadArchive"
+            Resource: 
+              - "*"
+          - Effect: Allow
+            Action:
+              - "codebuild:BatchGetBuilds"
+              - "codebuild:StartBuild"
+            Resource: 
+              - "*"
+          - Effect: Allow
+            Action:
+              - "codedeploy:CreateDeployment"
+              - "codedeploy:GetApplication"
+              - "codedeploy:GetApplicationRevision"
+              - "codedeploy:GetDeployment"
+              - "codedeploy:GetDeploymentConfig"
+              - "codedeploy:RegisterApplicationRevision"
+            Resource: 
+              - "*"
+          - Effect: Allow
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:ListBucket"
+            Resource: 
+              - !Join 
+                - ''
+                - - !GetAtt S3.Arn
+                  - '/*'
+              - !GetAtt S3.Arn
+      ManagedPolicyName: iam-policy-codepipeline
+
+  CodePipelineIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: Allow
+            Principal: 
+              Service: 
+                - codepipeline.amazonaws.com
+            Action: 
+              - 'sts:AssumeRole'
+      ManagedPolicyArns: 
+        - !Ref CodePipelineIAMPolicy
+      RoleName: iam-role-codepipeline
+      Tags:
+        - Key: Name
+          Value: iam-role-codepipeline
+
+Outputs:
+# ------------------------------------------------------------#
+# Outputs
+# ------------------------------------------------------------# 
+  CodeBuildIAMRoleARN:
+    Value: !GetAtt CodeBuildIAMRole.Arn
+    Export: 
+      Name: iam-role-codebuild-arn
+
+  CodeDeployIAMRoleARN:
+    Value: !GetAtt CodeDeployIAMRole.Arn
+    Export: 
+      Name: iam-role-codedeploy-arn
+
+  CodePipelineIAMRoleARN:
+    Value: !GetAtt CodePipelineIAMRole.Arn
+    Export: 
+      Name: iam-role-codepipeline-arn
