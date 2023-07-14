@@ -39,13 +39,20 @@ Resources:
         Statement: 
           - Effect: Allow
             Action:
-              - 's3:PutObject'
-              - 's3:GetObject'
-            Resource: 
-              - !Join 
-                - ''
-                - - !GetAtt S3.Arn
-                  - '/*'
+              - s3:CreateBucket
+              - s3:DeleteBucket
+              - s3:PutBucket
+              - s3:GetObject
+              - s3:GetObjectVersion
+              - s3:GetBucketAcl
+              - s3:GetBucketLocation
+              - s3:PutObject
+              - s3:ListBucket
+              - s3:SetBucketEncryption
+              - s3:GetEncryptionConfiguration
+              - s3:PutEncryptionConfiguration
+              - s3:PutBucketPolicy
+            Resource: "*"
           - Effect: Allow
             Action: 
               - 'codecommit:GitPull'
@@ -55,6 +62,50 @@ Resources:
               - 'logs:CreateLogGroup'
               - 'logs:CreateLogStream'
               - 'logs:PutLogEvents'
+            Resource: "*"
+          - Effect: Allow
+            Action: 
+              - cloudformation:DescribeStackEvents
+              - cloudformation:DescribeStackResources
+              - cloudformation:DescribeStackResource
+              - cloudformation:DescribeStacks
+              - cloudformation:ValidateTemplate
+              - cloudformation:CreateStack
+              - cloudformation:UpdateStack
+              - cloudformation:DeleteStack
+              - cloudformation:ListStackResources
+              - cloudformation:CreateChangeSet
+              - cloudformation:DescribeChangeSet
+              - cloudformation:DeleteChangeSet
+              - cloudformation:ExecuteChangeSet
+            Resource: "*"
+          - Effect: Allow
+            Action: 
+              - iam:CreateRole
+              - iam:DeleteRole 
+              - iam:DeleteRolePolicy
+              - iam:PutRolePolicy
+              - iam:GetRole
+              - iam:PassRole
+            Resource: "*"
+          - Effect: Allow
+            Action: 
+              - lambda:UpdateFunctionCode
+              - lambda:GetFunction
+              - lambda:GetFunctionConfiguration
+              - lambda:CreateFunction
+              - lambda:DeleteFunction
+              - lambda:ListVersionsByFunction
+              - lambda:PublishVersion
+              - lambda:PublishLayerVersion
+              - lambda:UpdateFunctionConfiguration
+              - lambda:GetLayerVersion
+              - lambda:ListTags
+              - lambda:DeleteLayerVersion
+            Resource: "*"
+          - Effect: Allow
+            Action: 
+              - apigateway:*
             Resource: "*"
       ManagedPolicyName: iam-policy-codebuild
 
