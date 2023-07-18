@@ -5,7 +5,21 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
-      - npm install
+      # - npm install
+      - echo "[profile goda-kozin]" > .awscli-config
+      - echo "role_arn = arn:aws:iam::055505553584:role/Goda-Kozin" >> .awscli-config
+      - export AWS_CONFIG_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
+
   build:
     commands:
-      - npx sls deploy
+      # - |
+      #   cat << EOF > aws_config
+      #   [profile test]
+      #   role_arn = arn:aws:iam::123456789012:role/my-role-to-assume
+      #   role_session_name = IntegrationTest
+      #   credential_source = EcsContainer
+      #   EOF
+      # - export AWS_CONFIG_FILE=./aws_config
+      - aws sts get-caller-identity --profile goda-kozin # Uses the assumed role
+
+      # - npx sls deploy
