@@ -20,6 +20,9 @@ phases:
       #   credential_source = EcsContainer
       #   EOF
       # - export AWS_CONFIG_FILE=./aws_config
-      - aws sts get-caller-identity --profile goda-kozin # Uses the assumed role
+      - cat .awscli-config
+      - cat ${CODEBUILD_SRC_DIR}/.awscli-config
+      - aws sts get-caller-identity
+      - aws sts get-caller-identity --profile goda-kozin
 
       # - npx sls deploy
