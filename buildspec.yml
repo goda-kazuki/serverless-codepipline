@@ -8,7 +8,9 @@ phases:
       # - npm install
       - echo "[profile goda-kozin]" > .awscli-config
       - echo "role_arn = arn:aws:iam::055505553584:role/Goda-Kozin" >> .awscli-config
+      - echo "credential_source = EcsContainer" >> .awscli-config
       - export AWS_CONFIG_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
+
 
   build:
     commands:
