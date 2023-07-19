@@ -4,6 +4,13 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 Description: CI/CD test Stack
 
+Parameters:
+# ------------------------------------------------------------#
+# Parameters
+# ------------------------------------------------------------# 
+  DeployAccountID:
+    Type: String
+
 Resources:
 # ------------------------------------------------------------#
 # S3
@@ -119,6 +126,9 @@ Resources:
             Principal: 
               Service: 
                 - codebuild.amazonaws.com
+              AWS:
+                - !Sub arn:aws:iam::${AWS::AccountId}:role/iam-role-codebuild
+                - !Sub arn:aws:iam::${DeployAccountID}:root
             Action: 
               - 'sts:AssumeRole'
       ManagedPolicyArns: 
