@@ -11,7 +11,13 @@ phases:
       - echo "role_arn = ${DeployRoleArn}" >> .awscli-config
       - echo "credential_source = EcsContainer" >> .awscli-config
       - export AWS_CONFIG_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
-      - export AWS_SHARED_CREDENTIALS_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
+
+
+      - echo "[deploy-account]" > .awscli-credentials
+      - echo "role_arn = ${DeployRoleArn}" >> .awscli-credentials
+      - echo "credential_source = EcsContainer" >> .awscli-credentials
+      - export AWS_SHARED_CREDENTIALS_FILE=${CODEBUILD_SRC_DIR}/.awscli-credentials
+
       - aws --version
 
       - npm install
@@ -20,6 +26,11 @@ phases:
     commands:
       - cat .awscli-config
       - cat ${CODEBUILD_SRC_DIR}/.awscli-config
+
+      - cat .awscli-credentials
+      - cat ${CODEBUILD_SRC_DIR}/.awscli-credentials
+
+
       - aws sts get-caller-identity
       - aws sts get-caller-identity --profile deploy-account
 
