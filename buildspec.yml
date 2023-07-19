@@ -11,6 +11,8 @@ phases:
       - echo "role_arn = ${DeployRoleArn}" >> .awscli-config
       - echo "credential_source = EcsContainer" >> .awscli-config
       - export AWS_CONFIG_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
+      - export AWS_SHARED_CREDENTIALS_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
+      - aws --version
 
       - npm install
 
