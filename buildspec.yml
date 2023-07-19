@@ -21,4 +21,5 @@ phases:
       - aws sts get-caller-identity
       - aws sts get-caller-identity --profile deploy-account
 
-      - npx sls deploy
+      - export AWS_SDK_LOAD_CONFIG=1
+      - npx sls deploy --aws-profile deploy-account
