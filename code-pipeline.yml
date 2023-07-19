@@ -13,6 +13,7 @@ Parameters:
     Default: serverless-codepipeline-code-pipeline
   DeployRoleArn:
     Type: String
+    Description: Deploy Target Account Role Arn
 
 Resources:
 # ------------------------------------------------------------#

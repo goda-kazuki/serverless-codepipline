@@ -51,3 +51,7 @@ phases:
       # - export AWS_SDK_LOAD_CONFIG=1
 
       - npx sls deploy
+
+
+
+# test
