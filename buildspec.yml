@@ -7,18 +7,19 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
-      - echo "[profile deploy-account]" > .awscli-config
+      - aws --version
+      
+      - echo "[profile deployAccount]" > .awscli-config
       - echo "role_arn = ${DeployRoleArn}" >> .awscli-config
       - echo "credential_source = EcsContainer" >> .awscli-config
       - export AWS_CONFIG_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
 
 
-      - echo "[deploy-account]" > .awscli-credentials
+      - echo "[deployAccount]" > .awscli-credentials
       - echo "role_arn = ${DeployRoleArn}" >> .awscli-credentials
       - echo "credential_source = EcsContainer" >> .awscli-credentials
       - export AWS_SHARED_CREDENTIALS_FILE=${CODEBUILD_SRC_DIR}/.awscli-credentials
 
-      - aws --version
 
       - npm install
 
@@ -32,7 +33,7 @@ phases:
 
 
       - aws sts get-caller-identity
-      - aws sts get-caller-identity --profile deploy-account
+      - aws sts get-caller-identity --profile deployAccount
 
       - export AWS_SDK_LOAD_CONFIG=1
-      - npx sls deploy --aws-profile deploy-account
+      - npx sls deploy --aws-profile deployAccount
