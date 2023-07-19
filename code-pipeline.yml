@@ -11,6 +11,8 @@ Parameters:
     MaxLength: 100
     Type: String
     Default: serverless-codepipeline-code-pipeline
+  DeployRoleArn:
+    Type: String
 
 Resources:
 # ------------------------------------------------------------#
@@ -51,6 +53,12 @@ Resources:
               Version: 1
             Configuration:
               ProjectName: !ImportValue codebuild-project-name
+              EnvironmentVariables:
+                Fn::Sub:
+                  - '[{"name":"DeployRoleArn", "value":"${DeployRoleArn}","type":"PLAINTEXT"}, 
+                      {"name":"Sample", "value":"${TestValue}${Sample}","type":"PLAINTEXT"}]'
+                  - TestValue: !ImportValue codecommit-repository-name
+                    Sample: !ImportValue codecommit-repository-name
             InputArtifacts: 
               - Name: SourceArtifact
             Name: Build
@@ -60,22 +68,6 @@ Resources:
             Region: ap-northeast-1
             RunOrder: 1
           Name: Build
-        # - Actions:
-        #   - ActionTypeId: 
-        #       Category: Deploy
-        #       Owner: AWS
-        #       Provider: CodeDeploy
-        #       Version: 1
-        #     Configuration:
-        #       ApplicationName: !ImportValue codedeploy-application-name
-        #       DeploymentGroupName: !ImportValue codedeploy-group
-        #     Name: Deploy
-        #     Namespace: DeployVariables
-        #     InputArtifacts:
-        #       - Name: BuildArtifact
-        #     Region: ap-northeast-1
-        #     RunOrder: 1
-        #   Name: Deploy
       Tags:
         - Key: Name
           Value: !Ref CodePipelineName
