@@ -36,4 +36,13 @@ phases:
       - aws sts get-caller-identity --profile deployAccount
 
       - export AWS_SDK_LOAD_CONFIG=1
+
+      # デバッグする
+      - echo Entered the pre_build phase...
+      - echo "Hello World" > /tmp/hello-world
+      - codebuild-breakpoint
+
+
+
+
       - npx sls deploy --aws-profile deployAccount --verbose
