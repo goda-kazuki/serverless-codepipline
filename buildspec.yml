@@ -23,6 +23,12 @@ phases:
 
       - npm install
 
+  # デバッグする
+  pre_build:
+    commands:
+      - echo Entered the pre_build phase...
+      - echo "Hello World" > /tmp/hello-world
+      - codebuild-breakpoint
   build:
     commands:
       - cat .awscli-config
@@ -37,10 +43,6 @@ phases:
 
       - export AWS_SDK_LOAD_CONFIG=1
 
-      # デバッグする
-      - echo Entered the pre_build phase...
-      - echo "Hello World" > /tmp/hello-world
-      - codebuild-breakpoint
 
 
 
