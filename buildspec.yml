@@ -30,4 +30,4 @@ phases:
       - aws sts get-caller-identity --profile goda-kozin
 
       # - npx sls deploy
-      # test
+      # test1
