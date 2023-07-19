@@ -12,7 +12,7 @@ phases:
       - echo "credential_source = EcsContainer" >> .awscli-config
       - export AWS_CONFIG_FILE=${CODEBUILD_SRC_DIR}/.awscli-config
 
-      # - npm install
+      - npm install
 
   build:
     commands:
@@ -21,4 +21,4 @@ phases:
       - aws sts get-caller-identity
       - aws sts get-caller-identity --profile deploy-account
 
-      # - npx sls deploy
+      - npx sls deploy
