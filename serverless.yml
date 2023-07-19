@@ -21,8 +21,7 @@ custom:
 
 params:
   default:
-    resourceNamePrefix: ${self:service}-${self:provider.stage}
-    resourceNameSuffix: "-${aws:accountId}"
+    resourceNamePrefix: ${self:service}-${self:provider.stage}-${aws:accountId}
 
 package:
   patterns:
