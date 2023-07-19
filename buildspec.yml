@@ -36,4 +36,4 @@ phases:
       - aws sts get-caller-identity --profile deployAccount
 
       - export AWS_SDK_LOAD_CONFIG=1
-      - npx sls deploy --aws-profile deployAccount
+      - npx sls deploy --aws-profile deployAccount --verbose
